@@ -6,17 +6,27 @@ const PORT = process.env.PORT || 5002
 // a comment to start development branch
 const message = "welcome to Tic-Tac-Toe!"
 
-io.on('connection', function (socket) {
-  // client connect, masuk ke sini
-  console.log('Socket.io client connected')
-  // server akan membalas dengan ini
-  socket.emit('init', { message })
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.emit("init", data)
 
-  socket.on('newMessage', function (payload) {
-    //socket.broadcast.emit // send to other users expect the client
-    //io.emit // send to everyone including the client
+  socket.on('updateLeaderboards', (payload) => {
+      console.log(payload, "<<dari server nihh");
+      socket.broadcast.emit('sendLeaderboardsToOther', payload);
   })
-})
+
+  socket.on('loseMessage', (payload) => {
+      console.log(payload, "<<dari server nihh");
+      socket.broadcast.emit('sendLoseToOther', payload);
+  })
+
+  socket.on('newMessage', (payload) => {
+      console.log(payload, "<<dari server nihh");
+      socket.broadcast.emit('sendMessageToOther', payload);
+  })
+
+  
+});
 
 server.listen(PORT, () => {
   console.log('Tic-Tac-Toe running on port: ' + PORT)
