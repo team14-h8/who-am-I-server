@@ -37,12 +37,6 @@ const rooms = [
     id: 'default',
     isStarted: false,
     scores: []
-    // scores: [
-    //   {
-    //     user: '1',
-    //     score: 100
-    //   }
-    // ]
   }
 ]
 
@@ -63,6 +57,12 @@ io.on('connection', (socket) => {
     users.push(payload)
     io.emit('getAllUsers', users) // send to other users expect the client
     io.emit('newPlayer', { message: newPlayerMessage })
+
+    let room = rooms.find( el => el.id === 'default')
+    room.scores.push({
+      user: payload.username,
+      score: 0
+    })
   })
 
   console.log('a user connected');
@@ -79,6 +79,7 @@ io.on('connection', (socket) => {
     room.isStarted = true
     console.log(rooms)
 
+    io.in(roomId).emit('updateScores', room.scores)
     io.in('default').emit('startGame')
 
   })
