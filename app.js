@@ -109,6 +109,12 @@ io.on('connection', (socket) => {
 
     socket.to(roomId).emit('playerLose')
   })
+  
+// Chat
+  socket.on('newMessage', (payload) => {
+    console.log(payload, "<<dari server nihh");
+    socket.broadcast.emit('sendMessageToOther', payload);
+})
 
 });
 
