@@ -46,7 +46,25 @@ const rooms = [
   }
 ]
 
+const newPlayerMessage = "a new challenger has entered the game!"
+
+const users = []
+
 io.on('connection', (socket) => {
+  ID = socket.id
+  // client connect, masuk ke sini
+  console.log('Socket.io client connected')
+  // server akan membalas dengan ini
+  socket.emit('init', users)
+
+
+  socket.on('newPlayer', function (payload) {
+    payload.id = ID
+    users.push(payload)
+    io.emit('getAllUsers', users) // send to other users expect the client
+    io.emit('newPlayer', { message: newPlayerMessage })
+  })
+
   console.log('a user connected');
   socket.emit("init", message)
 
@@ -90,22 +108,6 @@ io.on('connection', (socket) => {
 
     socket.to(roomId).emit('playerLose')
   })
-
-  socket.on('updateLeaderboards', (payload) => {
-      console.log(payload, "<<dari server nihh");
-      socket.broadcast.emit('sendLeaderboardsToOther', payload);
-  })
-
-  socket.on('loseMessage', (payload) => {
-      console.log(payload, "<<dari server nihh");
-      socket.broadcast.emit('sendLoseToOther', payload);
-  })
-
-  socket.on('newMessage', (payload) => {
-      console.log(payload, "<<dari server nihh");
-      socket.broadcast.emit('sendMessageToOther', payload);
-  })
-
 
 });
 
