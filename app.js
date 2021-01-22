@@ -21,9 +21,8 @@ io.on('connection', function (socket) {
     users.push(payload)
     io.emit('getAllUsers', users) // send to other users expect the client
     io.emit('newPlayer', { message: newPlayerMessage })
-    //io.emit // send to everyone including the client
   })
-})
+});
 
 server.listen(PORT, () => {
   console.log('Tic-Tac-Toe running on port: ' + PORT)
