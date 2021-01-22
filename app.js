@@ -7,16 +7,28 @@ const PORT = process.env.PORT || 5002
 const message = "welcome to Tic-Tac-Toe!"
 const questions = [
   {
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
-    answer: 'phone'
+    image_url: 'https://i.ibb.co/SvS3F0z/najwa-pixelated.png',
+    answer: 'najwa shihab'
   },
   {
-    image_url: 'https://www.talkwalker.com/images/2020/blog-headers/image-analysis.png',
-    answer: 'eye'
+    image_url: 'https://i.ibb.co/KsZz0bj/jokowi-pixelated.png',
+    answer: 'joko widodo'
   },
   {
-    image_url: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg',
-    answer: 'tree'
+    image_url: 'https://i.ibb.co/VpCCG6q/anya-pixelated.png',
+    answer: 'anya geraldine'
+  },
+  {
+    image_url: 'https://i.ibb.co/QNrPhpK/ahmad-dhani-pixelated.png',
+    answer: 'ahmad dhani'
+  },
+  {
+    image_url: 'https://i.ibb.co/T8HPG6B/agnes-mo-pixelated.png',
+    answer: 'agnes monica'
+  },
+  {
+    image_url: 'https://i.ibb.co/ynkRNR5/raff-ahmad-pixelated.png',
+    answer: 'raffi ahmad'
   }
 ]
 
