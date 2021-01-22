@@ -58,19 +58,53 @@ io.on('connection', (socket) => {
     io.emit('getAllUsers', users) // send to other users expect the client
     io.emit('newPlayer', { message: newPlayerMessage })
 
-    let room = rooms.find( el => el.id === 'default')
-    room.scores.push({
-      user: payload.username,
-      score: 0
+    let filteredRooms = rooms.filter(room => {
+      return !room.isStarted
     })
+
+    socket.emit('getAllRooms', filteredRooms)
   })
 
   console.log('a user connected');
   socket.emit("init", message)
 
-  // Join room and get questions list
-  socket.join('default')
-  socket.emit('initQuiz', questions)
+  socket.on('joinRoom', (user, roomId) => {
+    let room = rooms.find( el => el.id === roomId)
+    room.scores.push({
+      id: socket.id,
+      user: user,
+      score: 0
+    })
+
+    socket.join(roomId)
+    socket.emit('initQuiz', questions)
+  })
+
+  socket.on('createRoom', (user, roomId) => {
+    console.log('create room', roomId)
+    let room = rooms.find( el => el.id === roomId)
+
+    if (!room) {
+      rooms.push({
+        id: roomId,
+        isStarted: false,
+        scores: [{
+          id: socket.id,
+          user: user,
+          score: 0
+        }]
+      })
+    } else {
+      room.scores.push({
+        id: socket.id,
+        user: user,
+        score: 0
+      })
+    }
+
+    socket.join(roomId)
+    socket.emit('initQuiz', questions)
+  })
 
   socket.on('playerStartGame', (roomId) => {
     console.log('Player start game ', roomId)
@@ -80,18 +114,19 @@ io.on('connection', (socket) => {
     console.log(rooms)
 
     io.in(roomId).emit('updateScores', room.scores)
-    io.in('default').emit('startGame')
+    io.in(roomId).emit('startGame')
 
   })
 
   socket.on('correctAnswer', (userId, roomId) => {
     let room = rooms.find( el => el.id === roomId)
-    let score = room.scores.find( el => el.user === userId)
+    let score = room.scores.find( el => el.id === socket.id)
 
     if (score) {
       score.score += 100
     } else {
       room.scores.push({
+        id: socket.id,
         user: userId,
         score: 100
       })
